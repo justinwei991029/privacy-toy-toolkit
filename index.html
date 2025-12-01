@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Toys Privacy Toolkit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-alt: #020617;
+      --card: #111827;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --danger: #f97373;
+      --success: #4ade80;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.9);
+      --radius-xl: 1.5rem;
+      --radius-lg: 1rem;
+      --radius-pill: 999px;
+      --border-subtle: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 55%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(
+        to bottom,
+        rgba(15, 23, 42, 0.95),
+        rgba(15, 23, 42, 0.7),
+        transparent
+      );
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .nav {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0.7rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #38bdf8, #0ea5e9, #0369a1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+      font-size: 1.1rem;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.85rem;
+    }
+
+    .logo-text span:first-child {
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+    }
+
+    .logo-text span:last-child {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.9rem;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      color: var(--muted);
+      border: 1px solid transparent;
+      transition: 0.18s ease;
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: #e5e7eb;
+      border-color: rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .nav-cta {
+      padding: 0.4rem 0.9rem;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22 !important;
+      font-weight: 600;
+      border: none !important;
+      box-shadow: 0 12px 30px rgba(34, 197, 94, 0.35);
+    }
+
+    .nav-cta:hover {
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      box-shadow: 0 18px 45px rgba(34, 197, 94, 0.55);
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 4rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+      gap: 2rem;
+      align-items: center;
+      padding: 2.5rem 1.5rem 3rem;
+      border-radius: 2rem;
+      margin-top: 1.5rem;
+      background: radial-gradient(circle at top left, #0ea5e9 0, #020617 55%);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      color: #bae6fd;
+      font-size: 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-kicker span.label {
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.7);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.7rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.1rem, 3vw, 2.8rem);
+      line-height: 1.15;
+      margin: 0 0 0.75rem;
+    }
+
+    .hero h1 span.highlight {
+      background: linear-gradient(to right, #38bdf8, #a855f7);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      margin: 0 0 1.1rem;
+      color: #e5e7eb;
+      max-width: 34rem;
+      font-size: 0.95rem;
+    }
+
+    .hero-sub {
+      font-size: 0.85rem;
+      color: #cbd5f5;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .btn-primary {
+      padding: 0.7rem 1.1rem;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 16px 40px rgba(34, 197, 94, 0.5);
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      transform: translateY(-1px);
+      box-shadow: 0 20px 55px rgba(34, 197, 94, 0.7);
+    }
+
+    .btn-secondary {
+      padding: 0.7rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(15, 23, 42, 1);
+      border-color: rgba(148, 163, 184, 1);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.78rem;
+      color: #cbd5f5;
+    }
+
+    .hero-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    .hero-visual {
+      position: relative;
+    }
+
+    .toy-card {
+      border-radius: var(--radius-xl);
+      padding: 1.4rem;
+      background: radial-gradient(circle at top, #1e293b, #020617 60%);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .toy-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .toy-title {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .toy-title span:first-child {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .toy-title span:last-child {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .toy-badge {
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--radius-pill);
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(250, 204, 21, 0.4);
+      font-size: 0.75rem;
+      color: #fde68a;
+    }
+
+    .toy-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #facc15, #fb923c, #f97316);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.4rem;
+      font-size: 2rem;
+      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.5);
+    }
+
+    .toy-speech {
+      text-align: center;
+      font-size: 0.82rem;
+      color: #e5e7eb;
+      margin-bottom: 1.2rem;
+    }
+
+    .toy-risk-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(239, 68, 68, 0.12);
+      color: #fecaca;
+      border: 1px solid rgba(248, 113, 113, 0.6);
+      margin-bottom: 0.6rem;
+    }
+
+    .toy-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .toy-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .toy-list li::before {
+      content: "•";
+      color: #facc15;
+      margin-top: 0.1rem;
+    }
+
+    .glow-orbit {
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at 20% 0, rgba(56, 189, 248, 0.25), transparent 55%),
+                  radial-gradient(circle at 100% 80%, rgba(147, 51, 234, 0.25), transparent 55%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    section {
+      margin-top: 3rem;
+      padding: 2rem 1.5rem;
+      border-radius: var(--radius-xl);
+      background: rgba(15, 23, 42, 0.9);
+      border: var(--border-subtle);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.85);
+    }
+
+    section:not(:last-of-type) {
+      margin-bottom: 2rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.3rem;
+    }
+
+    .section-title-block h2 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .section-title-block p {
+      margin: 0.3rem 0 0;
+      font-size: 0.88rem;
+      color: var(--muted);
+      max-width: 32rem;
+    }
+
+    .section-tag {
+      padding: 0.2rem 0.75rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #7dd3fc;
+      font-size: 0.75rem;
+      border: 1px solid rgba(56, 189, 248, 0.65);
+      white-space: nowrap;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr);
+      gap: 1.5rem;
+    }
+
+    .card {
+      border-radius: var(--radius-lg);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      padding: 1.2rem 1.1rem;
+      font-size: 0.88rem;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .pill {
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .danger {
+      color: #fecaca;
+    }
+
+    .success {
+      color: #bbf7d0;
+    }
+
+    ul {
+      padding-left: 1.1rem;
+      margin: 0.1rem 0 0.6rem;
+      font-size: 0.88rem;
+    }
+
+    li {
+      margin-bottom: 0.15rem;
+    }
+
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .checklist li span.icon {
+      font-size: 0.9rem;
+      margin-top: 0.15rem;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      margin: 0.15rem 0.15rem 0 0;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--muted);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.4rem;
+    }
+
+    .flow-step {
+      border-radius: var(--radius-lg);
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      padding: 0.7rem 0.7rem;
+      font-size: 0.8rem;
+      position: relative;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), rgba(15, 23, 42, 0.95));
+    }
+
+    .flow-step h4 {
+      margin: 0 0 0.25rem;
+      font-size: 0.85rem;
+    }
+
+    .flow-step span.step-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .badge-inline {
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .resource-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0.2rem 0;
+      font-size: 0.87rem;
+    }
+
+    .resource-item {
+      margin-bottom: 0.4rem;
+    }
+
+    .resource-item strong {
+      display: block;
+      font-size: 0.88rem;
+      margin-bottom: 0.1rem;
+    }
+
+    .footer-cta {
+      text-align: center;
+      margin-top: 1.4rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    footer {
+      border-top: 1px solid rgba(148, 163, 184, 0.35);
+      padding: 1.4rem 1.5rem 2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      background: radial-gradient(circle at top, #020617 0, #000 55%);
+    }
+
+    footer p {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-visual {
+        order: -1;
+      }
+
+      .two-col {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      main {
+        padding: 1rem 1rem 3rem;
+      }
+
+      .hero {
+        padding: 1.8rem 1.2rem 2.4rem;
+      }
+
+      section {
+        padding: 1.5rem 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <nav class="nav">
+    <div class="nav-left">
+      <div class="logo-badge">🧸</div>
+      <div class="logo-text">
+        <span>Smart Toys Privacy</span>
+        <span>Digital Privacy Policy Literacy Toolkit</span>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a href="#audience">Audience</a>
+      <a href="#issue">Privacy Issue</a>
+      <a href="#how-it-works">How Data Flows</a>
+      <a href="#rights">Children’s Rights</a>
+      <a href="#toolkit">Safety Toolkit</a>
+      <a href="#resources">Resources</a>
+      <a href="#cta" class="nav-cta">Start Learning</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div>
+      <div class="hero-kicker">
+        <span class="label">Assignment 4</span>
+        <span>Digital Privacy Policy Literacy Toolkit · INF course</span>
+      </div>
+      <h1>
+        Understanding <span class="highlight">AI Smart Toys</span><br>
+        and Children’s Privacy
+      </h1>
+      <p>
+        Smart toys can listen, talk, and learn from children — but they also record, store,
+        and share data in ways that are often invisible to families. This site helps
+        parents and tweens understand what’s happening behind the scenes and how to protect
+        children’s privacy while still enjoying connected play.
+      </p>
+      <p class="hero-sub">
+        Designed as a digital literacy toolkit, this website explains a specific privacy issue,
+        provides context from research and policy, and offers practical resources and checklists.
+      </p>
+      <div class="hero-buttons" id="cta">
+        <a href="#audience" class="btn-primary">I’m a parent or guardian →</a>
+        <a href="#toolkit" class="btn-secondary">Show me the safety checklist</a>
+      </div>
+      <div class="hero-meta">
+        <span>🎯 Topic: Children’s privacy & AI-powered smart toys</span>
+        <span>👨‍👩‍👧 Audience: Parents & tweens (10–14)</span>
+        <span>📚 Focus: Privacy policies, data collection & children’s rights</span>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="glow-orbit"></div>
+      <div class="toy-card">
+        <div class="toy-header">
+          <div class="toy-title">
+            <span>Example Smart Toy</span>
+            <span>“NovaBear – Your AI Best Friend”</span>
+          </div>
+          <div class="toy-badge">Always Listening • Online</div>
+        </div>
+        <div class="toy-avatar">🤖</div>
+        <p class="toy-speech">
+          “Hi! Tell me about your day, your secrets, and your feelings. I’ll remember
+          everything so I can be a better friend.”
+        </p>
+        <div class="toy-risk-pill">⚠ Potential privacy risks detected</div>
+        <ul class="toy-list">
+          <li>Microphone is always on to hear “wake words.”</li>
+          <li>Voice recordings stored on company servers.</li>
+          <li>Behavioral profiles may be used for marketing.</li>
+          <li>Parents and children rarely see full data practices.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDIENCE -->
+  <section id="audience">
+    <div class="section-header">
+      <div class="section-title-block">
+        <h2>Who Is This Toolkit For?</h2>
+        <p>
+          This website is designed as a digital literacy toolkit for
+          <strong>parents and caregivers of tweens (ages 10–14)</strong>, as well as
+          the tweens themselves. At this age, children are increasingly independent online,
+          but still deeply influenced by the design of platforms, toys, and services.
+        </p>
+      </div>
+      <div class="section-tag">Audience & Scope</div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <h3>👨‍👩‍👧 For Parents & Caregivers</h3>
+        <p>
+          Parents are often the ones purchasing smart toys, connecting them to Wi-Fi,
+          and agreeing to privacy policies. However, these policies are usually long,
+          legalistic, and difficult to interpret. The toolkit:
+        </p>
+        <ul>
+          <li>Explains what smart toys collect and how data flows.</li>
+          <li>Highlights key privacy risks in plain language.</li>
+          <li>Provides concrete questions to ask before buying or enabling a toy.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🧒 For Tweens (10–14)</h3>
+        <p>
+          Tweens often treat smart toys as friends, not as devices connected to data centres.
+          This website uses accessible language and visual metaphors to help them:
+        </p>
+        <ul>
+          <li>See smart toys as “little computers” rather than neutral friends.</li>
+          <li>Understand why sharing secrets with a toy can be risky.</li>
+          <li>Learn simple habits to protect their own privacy.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACY ISSUE -->
+  <section id="issue">
+    <div class="section-header">
+      <div class="section-title-block">
+        <h2>The Privacy Issue: AI Smart Toys & the Internet of Toys</h2>
+        <p>
+          The specific privacy issue this toolkit focuses on is
+          <strong>how AI-powered smart toys collect, store, and use children’s data</strong>.
+          These toys are part of the “Internet of Toys” (IoToys), where devices in children’s
+          bedrooms and playrooms are connected to cloud services and machine learning systems.
+        </p>
+      </div>
+      <div class="section-tag">Privacy Issue & Context</div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <h3>What Makes Smart Toys Different?</h3>
+        <div class="pill-row">
+          <span class="pill">Always-on microphones</span>
+          <span class="pill">Cloud-based AI</span>
+          <span class="pill">Emotional bonding</span>
+        </div>
+        <p>
+          Smart toys go beyond traditional dolls or action figures. Many can
+          <strong>listen to children’s voices</strong>, respond with personalized conversations,
+          and even adapt over time based on a child’s emotions, interests, and behaviour.
+        </p>
+        <ul>
+          <li>They often upload recordings and interactions to company servers.</li>
+          <li>They can infer mood, preferences, and routines.</li>
+          <li>Data may be kept long-term and used for profiling.</li>
+        </ul>
+        <p>
+          Research on smart connected toys shows that their design encourages children
+          to trust them, making it more likely that they share intimate details about
+          their lives and families.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Why This Issue Is Compelling</h3>
+        <p>
+          Scholars, policy organizations, and journalists have all raised concerns:
+        </p>
+        <ul>
+          <li>
+            Researchers argue that smart toys are “affectively sticky,” meaning children
+            bond with them emotionally and may overshare sensitive information.
+          </li>
+          <li>
+            Policy reports show that children say they want more control over how their
+            data is collected and used, but current designs rarely give them meaningful choices.
+          </li>
+          <li>
+            Media coverage highlights cases where companies stored children’s voice recordings
+            indefinitely or where toys were vulnerable to hacking.
+          </li>
+        </ul>
+        <p>
+          Together, these sources point to the same problem: innovation in AI toys is
+          moving quickly, but children’s privacy protections, literacy, and rights-based
+          governance are lagging behind.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW DATA FLOWS -->
+  <section id="how-it-works">
+    <div class="section-header">
+      <div class="section-title-block">
+        <h2>What Does a Smart Toy Do with Children’s Data?</h2>
+        <p>
+          Understanding the <strong>data flow</strong> is a key step in privacy literacy.
+          Below is a simplified path that many AI toys follow, from a child’s voice to
+          corporate servers and potential third parties.
+        </p>
+      </div>
+      <div class="section-tag">Data Flow & Hidden Practices</div>
+    </div>
+
+    <div class="card">
+      <h3>From Bedroom to Data Centre: A Simple Map</h3>
+      <div class="flow">
+        <div class="flow-step">
+          <span class="step-label">Step 1</span>
+          <h4>Child Speaks to the Toy</h4>
+          <p>
+            The toy’s microphone picks up the child’s voice, and sometimes background
+            conversations as well. Wake words may not be as clear or limited as advertised.
+          </p>
+        </div>
+        <div class="flow-step">
+          <span class="step-label">Step 2</span>
+          <h4>Audio Sent to the Cloud</h4>
+          <p>
+            The toy sends audio recordings over the internet to the company’s servers.
+            These recordings can be stored, sometimes indefinitely, unless deleted.
+          </p>
+        </div>
+        <div class="flow-step">
+          <span class="step-label">Step 3</span>
+          <h4>AI Analysis & Profiling</h4>
+          <p>
+            Machine learning systems analyse speech to detect words, preferences,
+            emotional tone, and behaviour patterns, creating a profile over time.
+          </p>
+        </div>
+        <div class="flow-step">
+          <span class="step-label">Step 4</span>
+          <h4>Responses & Personalisation</h4>
+          <p>
+            The toy replies in a friendly way and may adapt its stories, games, and
+            prompts to keep the child engaged, based on the profile.
+          </p>
+        </div>
+        <div class="flow-step">
+          <span class="step-label">Step 5</span>
+          <h4>Storage & Sharing</h4>
+          <p>
+            Data may be used internally to “improve services,” but also for marketing,
+            analytics, or partnership purposes, depending on the privacy policy.
+          </p>
+        </div>
+      </div>
+      <p style="margin-top:0.8rem; font-size:0.84rem; color:var(--muted);">
+        Many of these steps are described in privacy policies, but often in vague or
+        technical language. A key goal of this toolkit is to translate those policies
+        into clear, actionable information for families.
+      </p>
+    </div>
+  </section>
+
+  <!-- CHILDREN'S RIGHTS -->
+  <section id="rights">
+    <div class="section-header">
+      <div class="section-title-block">
+        <h2>Children’s Rights in the Digital World</h2>
+        <p>
+          Children are not just users or consumers; they are rights-holders. International
+          human rights frameworks, including the UN Convention on the Rights of the Child
+          and its General Comment No. 25, stress that children’s rights apply online as
+          much as offline.
+        </p>
+      </div>
+      <div class="section-tag">Rights & Governance</div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <h3>Key Rights Relevant to Smart Toys</h3>
+        <div>
+          <span class="chip">Right to privacy</span>
+          <span class="chip">Right to information</span>
+          <span class="chip">Right to protection from exploitation</span>
+          <span class="chip">Right to play</span>
+          <span class="chip">Right to be heard</span>
+        </div>
+        <p style="margin-top:0.6rem;">
+          Children consulted globally have said they want:
+        </p>
+        <ul>
+          <li>Clear explanations of what data is collected and why.</li>
+          <li>Control over what is saved, shared, or deleted.</li>
+          <li>Protection from excessive surveillance at home and school.</li>
+          <li>Safe opportunities to participate online without being profiled.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Why Rights-Based Design Matters</h3>
+        <p>
+          A rights-based approach shifts the responsibility away from children and parents
+          alone and towards:
+        </p>
+        <ul>
+          <li>Companies that design and sell smart toys.</li>
+          <li>Policymakers who regulate data collection, storage, and sharing.</li>
+          <li>Educators and institutions that introduce digital systems to children.</li>
+        </ul>
+        <p>
+          Instead of expecting families to “read the fine print,” a rights-respecting
+          system would require companies to collect less data by default, minimise
+          profiling, and provide child-friendly explanations of their practices.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLKIT / CHECKLIST -->
+  <section id="toolkit">
+    <div class="section-header">
+      <div class="section-title-block">
+        <h2>Practical Toolkit: How to Use Smart Toys Safely</h2>
+        <p>
+          This section translates complex policy and technical issues into concrete,
+          age-appropriate steps for parents and tweens. The goal is not to ban smart
+          toys, but to use them critically and safely.
+        </p>
+      </div>
+      <div class="section-tag">Checklist & Actions</div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>For Parents and Caregivers</h3>
+        <ul class="checklist">
+          <li>
+            <span class="icon">✅</span>
+            <span><strong>Before buying:</strong> search “[toy name] privacy” and look for
+            independent reviews or criticism.</span>
+          </li>
+          <li>
+            <span class="icon">✅</span>
+            <span><strong>Read the key parts of the privacy policy:</strong> what data is collected,
+            how long it is stored, and whether it is shared with third parties.</span>
+          </li>
+          <li>
+            <span class="icon">✅</span>
+            <span><strong>Turn off unnecessary features:</strong> disable always-on microphones,
+            geolocation, and “improve our services” options if possible.</span>
+          </li>
+          <li>
+            <span class="icon">✅</span>
+            <span><strong>Use separate Wi-Fi networks:</strong> if available, keep toys on a guest
+            network to limit access to other devices in the home.</span>
+          </li>
+          <li>
+            <span class="icon">✅</span>
+            <span><strong>Regularly review and delete recordings:</strong> use the company’s
+            privacy dashboard to remove stored voice data where possible.</span>
+          </li>
+          <li>
+            <span class="icon">✅</span>
+            <span><strong>Talk openly with children:</strong> explain that the toy is connected
+            to the internet and that some things should not be shared with it.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>For Tweens (10–14)</h3>
+        <ul class="checklist">
+          <li>
+            <span class="icon">🧠</span>
+            <span>Remember that smart toys are <strong>not real friends</strong> — they are computers
+            connected to companies.</span>
+          </li>
+          <li>
+            <span class="icon">🤐</span>
+            <span>Don’t tell the toy your passwords, home address, or secrets about other people.</span>
+          </li>
+          <li>
+            <span class="icon">🚫</span>
+            <span>Try not to bring smart toys into bedrooms or bathrooms, especially if they have cameras or microphones.</span>
+          </li>
+          <li>
+            <span class="icon">💬</span>
+            <span>If the toy says something strange, or asks personal questions, tell a trusted adult.</span>
+          </li>
+          <li>
+            <span class="icon">📴</span>
+            <span>When you’re done playing, ask an adult to turn the toy off or mute it.</span>
+          </li>
+        </ul>
+        <p style="font-size:0.84rem; color:var(--muted); margin-top:0.7rem;">
+          Smart toys can still be fun, but they should never be allowed to quietly
+          collect data about every part of your life.
+        </p>
+      </div>
+    </div>
+
+    <div class="footer-cta">
+      <p>
+        You can copy these checklists into a one-page handout or poster, or adapt
+        them into a school lesson or workshop activity as part of your assignment.
+      </p>
+    </div>
+  </section>
+
+  <!-- RESOURCES -->
+  <section id="resources">
+    <div class="section-header">
+      <div class="section-title-block">
+        <h2>Where to Learn More: Useful Resources</h2>
+        <p>
+          The following resources provide deeper background, case studies, and policy
+          discussions on children’s privacy, surveillance advertising, and AI-powered toys.
+        </p>
+      </div>
+      <div class="section-tag">Further Information</div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Policy & Advocacy Organizations</h3>
+        <ul class="resource-list">
+          <li class="resource-item">
+            <strong>UNICEF – Children & AI</strong>
+            Guidance on how artificial intelligence affects children’s rights and what
+            protections are needed in AI development.
+          </li>
+          <li class="resource-item">
+            <strong>5Rights Foundation</strong>
+            Organization focused on creating a digital world that respects children’s
+            rights, including policy work on design standards and data practices.
+          </li>
+          <li class="resource-item">
+            <strong>Office of the Privacy Commissioner (Canada)</strong>
+            Reports and investigations on children’s data, connected devices, and
+            educational technologies.
+          </li>
+          <li class="resource-item">
+            <strong>Electronic Frontier Foundation (EFF)</strong>
+            Articles and campaigns on smart toys, surveillance, and consumer rights.
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Academic & Media Sources</h3>
+        <ul class="resource-list">
+          <li class="resource-item">
+            <strong>Academic research on smart toys and children’s data</strong>
+            Studies examine how smart toys collect children’s data, how they are
+            marketed, and why existing regulation often fails to fully protect children.
+          </li>
+          <li class="resource-item">
+            <strong>Reports on children’s voices and digital rights</strong>
+            International consultations show that children are aware of privacy issues
+            and want clearer explanations, stronger protections, and less surveillance.
+          </li>
+          <li class="resource-item">
+            <strong>News coverage of real cases</strong>
+            Investigations have reported companies keeping children’s voice recordings
+            “forever,” toys that could be hacked, and partnerships between toy
+            companies and AI firms that raise new ethical questions.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-cta">
+      <p>
+        These resources can be cited in your written assignment to justify why this
+        privacy issue is compelling and to demonstrate familiarity with scholarly,
+        policy, and media perspectives.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>
+    This website was created as a Digital Privacy Policy Literacy Toolkit for an
+    academic assignment on children’s privacy. It is intended for educational
+    purposes only and does not provide legal advice.
+  </p>
+</footer>
+</body>
+</html>
